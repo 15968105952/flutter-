@@ -1,5 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/animation_processing.dart';
+import 'package:flutterapp/canvas_draw_paint.dart';
+import 'package:flutterapp/custom_button.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutterapp/asynchronous_ui.dart';
 
 void main() => runApp(new SampleApp());
 
@@ -21,60 +26,17 @@ class SampleApp extends StatelessWidget {
 //      home: new PageOne(),
       //动画处理
 //      home: new MyFadeTest(title: 'Sample App'),
-      //如何使用Canvas draw/paint
-    home:new Scaffold(
-      body: new DemoApp(),
-    )
+      //如何使用Canvas draw/paint,未成功，待完善
+//    home:new Scaffold(
+//      body: new DemoApp(),
+//    )
+    //自定义按钮
+//    home: new Center(
+//      child: new CustomButton("hello"),
+//    ),
+    //异步UI
+      home: new AsynchronousUI(),
     );
   }
 }
 
-class DemoApp extends StatelessWidget {
-  Widget build(BuildContext context) => new Scaffold(body: new Signature());
-}
-
-class Signature extends StatefulWidget {
-  SignatureState createState() => new SignatureState();
-}
-
-class SignatureState extends State<Signature> {
-  List<Offset> _points = <Offset>[];
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new GestureDetector(
-      onPanUpdate: (DragUpdateDetails details){
-        setState(() {
-          RenderBox referenceBox=context.findRenderObject();
-          Offset localPosition=referenceBox.globalToLocal(details.globalPosition);
-          _points=new List.from(_points)..add(localPosition);
-        });
-      },
-      onPanEnd: (DragEndDetails details)=>_points.add(null)
-      ,
-      child: new CustomPaint(painter: new SignaturePainter(_points)),
-    );
-  }
-}
-
-class SignaturePainter extends CustomPainter {
-  SignaturePainter(this.points);
-  final List<Offset> points;
-  @override
-  void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
-    var paint=new Paint()
-    ..color=Colors.black
-        ..strokeCap=StrokeCap.round
-        ..strokeWidth=5.0;
-    for(int i=0;i<points.length-1;i++){
-      if(points[i]!=null&&points[i+1]!=null){
-        canvas.drawLine(points[i], points[i+1], paint);
-      }
-    }
-
-  }
-
-  @override
-  bool shouldRepaint(SignaturePainter  oldDelegate) =>oldDelegate.points!=points;
-}
