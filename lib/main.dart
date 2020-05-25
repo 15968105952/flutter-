@@ -107,6 +107,10 @@ class _IsolateUIState extends State<IsolateUI> {
 
     List msg = await sendReceive(
         sendPort, "https://jsonplaceholder.typicode.com/posts");
+
+    setState(() {
+      widgets=msg;
+    });
   }
 
   static dataloader(SendPort sendPort) async {
@@ -121,7 +125,7 @@ class _IsolateUIState extends State<IsolateUI> {
     }
   }
 
-  Future sendReceive(SendPort sendPort, String msg) {
+  Future sendReceive(SendPort sendPort, msg) {
     ReceivePort receivePort = new ReceivePort();
     sendPort.send([msg, receivePort.sendPort]);
     return receivePort.first;
