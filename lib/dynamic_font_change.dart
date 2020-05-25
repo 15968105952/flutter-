@@ -26,7 +26,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
       floatingActionButton: new FloatingActionButton(
         onPressed: _updateText,
         tooltip: "Update Text",
-        child: new Icon(Icons.update,color: Colors.pink,),
+        child: new Image.asset('images/icon_yladfs.png'),
       ),
     );
   }

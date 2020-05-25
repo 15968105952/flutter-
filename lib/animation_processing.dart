@@ -5,10 +5,10 @@ class MyFadeTest extends StatefulWidget {
   MyFadeTest({Key key, this.title}) : super(key: key);
 
   @override
-  _MyFadeTest createState() => new _MyFadeTest();
+  _MyFadeTestState createState() => new _MyFadeTestState();
 }
 
-class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
+class _MyFadeTestState extends State<MyFadeTest> with TickerProviderStateMixin {
   AnimationController controller;
   CurvedAnimation curve;
 

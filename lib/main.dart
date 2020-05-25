@@ -1,11 +1,16 @@
-import 'dart:convert';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:isolate';
-
+import 'package:flutterapp/isolate_ui.dart';
+import 'package:flutterapp/strings.dart';
+import 'package:flutterapp/dynamic_font_change.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutterapp/lifecycle_watcher.dart';
+import 'package:flutterapp/linearLayout.dart';
+import 'package:flutterapp/gesture_detector_sample.dart';
+import 'package:flutterapp/animation_processing.dart';
+import 'package:flutterapp/hint_show.dart';
 void main() => runApp(new SampleApp());
 
 class SampleApp extends StatelessWidget {
@@ -14,7 +19,7 @@ class SampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return new MaterialApp(
-      title: 'Sample App',
+      title: Strings.title,
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -34,100 +39,23 @@ class SampleApp extends StatelessWidget {
 //    home: new Center(
 //      child: new CustomButton("hello"),
 //    ),
-      //异步UI
-      home: new IsolateUI(),
+//      //异步UI
+//      home: new IsolateUI(),
+//        //如何监听Android Activity生命周期事件
+//        home:new Center(
+//           child: new LifecycleWatcher(),
+//        )
+        //LinearLayout在Flutter中相当于什么
+//        home:new Center(
+//        child: new LinearLayout(),
+//    ),
+        //如何处理widget上的其他手势
+//        home:new Center(
+//          child: new GestureDetectorSample(),
+//        ),
+      //Input的”hint”在flutter中相当于什么
+        home:new HintShow(),
     );
   }
 }
 
-class IsolateUI extends StatefulWidget {
-  IsolateUI({Key key}) : super(key: key);
-
-  @override
-  _IsolateUIState createState() => new _IsolateUIState();
-}
-
-class _IsolateUIState extends State<IsolateUI> {
-  List widgets = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    loadData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Sample App"),
-        ),
-        body: getBody());
-  }
-
-  getBody() {
-    if (showLoadingDialog()) {
-      return getProgressDialog();
-    } else {
-      return getListView();
-    }
-  }
-
-  showLoadingDialog() {
-    if (widgets.length == 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  getProgressDialog() {
-    return new Center(child: new CircularProgressIndicator());
-  }
-
-  ListView getListView() => new ListView.builder(
-      itemCount: widgets.length,
-      itemBuilder: (BuildContext context, int position) {
-        return getRow(position);
-      });
-
-  Widget getRow(int position) {
-    return new Padding(
-        padding: new EdgeInsets.all(10.0),
-        child: new Text("${widgets[position]["title"]}"));
-  }
-
-  void loadData() async {
-    ReceivePort receivePort = new ReceivePort();
-    await Isolate.spawn(dataloader, receivePort.sendPort);
-
-    SendPort sendPort = await receivePort.first;
-
-    List msg = await sendReceive(
-        sendPort, "https://jsonplaceholder.typicode.com/posts");
-
-    setState(() {
-      widgets=msg;
-    });
-  }
-
-  static dataloader(SendPort sendPort) async {
-    ReceivePort receivePort = new ReceivePort();
-    sendPort.send(receivePort.sendPort);
-    await for (var msg in receivePort) {
-      String data = msg[0];
-      SendPort replyTo = msg[1];
-      String dataURL = data;
-      http.Response response = await http.get(dataURL);
-      replyTo.send(json.decode(response.body));
-    }
-  }
-
-  Future sendReceive(SendPort sendPort, msg) {
-    ReceivePort receivePort = new ReceivePort();
-    sendPort.send([msg, receivePort.sendPort]);
-    return receivePort.first;
-  }
-}
