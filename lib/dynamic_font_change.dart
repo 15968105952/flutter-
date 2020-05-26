@@ -20,9 +20,23 @@ class _SampleAppPageState extends State<SampleAppPage> {
     // TODO: implement build
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Flutter App"),
+        title: new Text("Flutter App",
+          textAlign:TextAlign.start ,
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.green
+        ),),
       ),
-      body: new Center(child: new Text(textToShow)),
+      body: new Center(child: new Text(textToShow,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 30,
+        color: Colors.black,
+        backgroundColor: Colors.green,
+        decoration: TextDecoration.underline,
+        decorationColor: Colors.grey,
+        decorationStyle: TextDecorationStyle.dashed
+      ),)),
       floatingActionButton: new FloatingActionButton(
         onPressed: _updateText,
         tooltip: "Update Text",

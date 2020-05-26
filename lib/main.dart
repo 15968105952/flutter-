@@ -2,15 +2,18 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/default_text_style.dart' as prefix0;
 import 'package:flutterapp/isolate_ui.dart';
 import 'package:flutterapp/strings.dart';
-import 'package:flutterapp/dynamic_font_change.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterapp/lifecycle_watcher.dart';
 import 'package:flutterapp/linearLayout.dart';
 import 'package:flutterapp/gesture_detector_sample.dart';
 import 'package:flutterapp/animation_processing.dart';
 import 'package:flutterapp/hint_show.dart';
+import 'package:flutterapp/default_text_style.dart';
+import 'package:flutterapp/row.dart';
+
 void main() => runApp(new SampleApp());
 
 class SampleApp extends StatelessWidget {
@@ -54,7 +57,11 @@ class SampleApp extends StatelessWidget {
 //          child: new GestureDetectorSample(),
 //        ),
       //Input的”hint”在flutter中相当于什么
-        home:new HintShow(),
+//        home:new HintShow(),
+      //DefaultTextStyle
+//        home:new SampleAppPage(),
+      //Row 水平布局组件
+      home:LayoutDemo(),
     );
   }
 }
